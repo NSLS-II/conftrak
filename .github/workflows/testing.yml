@@ -71,7 +71,6 @@ jobs:
           conda list
 
       - name: Test with pytest
-        shell: bash -l {0}
         run: |
           set -vxeuo pipefail
           pytest -s -vv
