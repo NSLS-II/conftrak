@@ -1,0 +1,7 @@
+doct
+jsonschema
+pymongo
+pyyaml
+requests
+tornado<5
+ujson
