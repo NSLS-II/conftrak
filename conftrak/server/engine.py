@@ -7,6 +7,7 @@ from . import utils
 from jsonschema.exceptions import ValidationError, SchemaError
 from ..exceptions import ConfTrakException
 
+
 def db_connect(database, mongo_host, mongo_port):
     """Helper function to deal with stateful connections to MongoDB
     Connection established lazily. Connects to the database on request.
@@ -32,6 +33,7 @@ def db_connect(database, mongo_host, mongo_port):
     except (pymongo.errors.ConnectionFailure,
             pymongo.errors.ServerSelectionTimeoutError):
         raise ConfTrakException("Unable to connect to MongoDB server...")
+
     database = client[database]
 
     database.configuration.create_index([('uid', pymongo.DESCENDING)],
@@ -129,7 +131,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
                     raise utils._compose_err_msg(400,
                                                  "Invalid schema on document(s)", d)
                 uids.append(d['uid'])
-                database.configuration.insert(d)
+                database.configuration.insert_one(d)
         elif isinstance(data, dict):
             data = utils.default_timeuid(data)
             # Ensure the active status on the new Configuration
@@ -141,7 +143,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
                 raise utils._compose_err_msg(400,
                                              "Invalid schema on document(s)", data)
             uids.append(data['uid'])
-            database.configuration.insert(data)
+            database.configuration.insert_one(data)
         else:
             raise utils._compose_err_msg(500,
                                          status='ConfigurationHandler expects list or dict') 
