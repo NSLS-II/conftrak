@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from tornado import gen
 import tornado.web
 import pymongo
 import jsonschema
@@ -56,7 +57,7 @@ class DefaultHandler(tornado.web.RequestHandler):
     If you use multiple threads it is important to use IOLoop.add_callback
     to transfer control back to the main thread before finishing the request.
     """
-    @tornado.web.asynchronous
+    @gen.coroutine
     def set_default_headers(self):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
@@ -86,7 +87,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
     field. Otherwise, provide a dict that holds the new value and field name.
     Returns the total number of documents that are updated.
     """
-    @tornado.web.asynchronous
+    @gen.coroutine
     def get(self):
         database = self.settings['db']
         query = utils.unpack_params(self)
@@ -112,7 +113,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
                                          query)
 
 
-    @tornado.web.asynchronous
+    @gen.coroutine
     def post(self):
         database = self.settings['db']
         data = ujson.loads(self.request.body.decode("utf-8"))
@@ -147,7 +148,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
                                          status='ConfigurationHandler expects list or dict') 
         self.finish(ujson.dumps(uids))
 
-    @tornado.web.asynchronous
+    @gen.coroutine
     def put(self):
         database = self.settings['db']
         incoming = ujson.loads(self.request.body)
@@ -165,7 +166,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
                                            upsert=False)
         self.finish(ujson.dumps(res.raw_result))
 
-    @tornado.web.asynchronous
+    @gen.coroutine
     def delete(self):
         database = self.settings['db']
         incoming = utils.unpack_params(self)
@@ -187,18 +188,18 @@ class ConfigurationReferenceHandler(DefaultHandler):
 
 class SchemaHandler(DefaultHandler):
     """Provides the json used for schema validation provided collection name"""
-    @tornado.web.asynchronous
+    @gen.coroutine
     def get(self):
         col = utils.unpack_params(self)
         self.write(utils.schemas[col])
         self.finish()
 
-    @tornado.web.asynchronous
+    @gen.coroutine
     def put(self):
         raise utils._compose_err_msg(405,
                                      status='Not allowed on server')
 
-    @tornado.web.asynchronous
+    @gen.coroutine
     def post(self):
         raise utils._compose_err_msg(405,
                                      status='Not allowed on server')
