@@ -104,7 +104,8 @@ class ConfigurationReferenceHandler(DefaultHandler):
             else:
                 docs = database.configuration.find(query).sort('time',
                                                                direction=pymongo.DESCENDING)
-            if docs and docs.count() > 0:
+            num_docs = database.configuration.count_documents(query)
+            if docs and num_docs > 0:
                 utils.return2client(self, docs)
             else:
                 raise utils._compose_err_msg(500, 'No results found!')
