@@ -12,7 +12,8 @@ from .utils import testing_config as TESTING_CONFIG
 
 @pytest.fixture
 def app():
-    db = db_connect(TESTING_CONFIG['database'], TESTING_CONFIG['mongohost'],
+    db = db_connect(TESTING_CONFIG['database'],
+                    TESTING_CONFIG['mongohost'],
                     TESTING_CONFIG['mongoport'])
     return Application(db)
 
@@ -27,11 +28,13 @@ def test_parse_configuration():
 
 
 def test_db_connect():
-    db_connect(TESTING_CONFIG['database'], TESTING_CONFIG['mongohost'],
+    db_connect(TESTING_CONFIG['database'],
+               TESTING_CONFIG['mongohost'],
                TESTING_CONFIG['mongoport'])
 
     with pytest.raises(ConfTrakException):
-        db_connect(TESTING_CONFIG['database'], 'invalid_mongo_host',
+        db_connect(TESTING_CONFIG['database'],
+                   'invalid_mongo_host',
                    TESTING_CONFIG['mongoport'])
 
 

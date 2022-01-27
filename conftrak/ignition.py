@@ -67,7 +67,7 @@ def start_server(args=None):
     ----------
     config: dict
         Command line arguments always have priority over local config or yaml
-        files.Using these parameters,  a tornado event loop is created.  Keep
+        files. Using these parameters, a tornado event loop is created. Keep
         in mind that this server is started in lazy fashion. It does not verify
         the existence of a mongo instance running on the specified location.
     """
