@@ -167,7 +167,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
         res = database.configuration.update_many(filter=query,
                                            update={'$set': update},
                                            upsert=False)
-        self.finish(ujson.dumps(res.raw_result))
+        self.finish(ujson.dumps(utils.sanitize_return(res.raw_result)))
 
     @gen.coroutine
     def delete(self):
@@ -186,7 +186,7 @@ class ConfigurationReferenceHandler(DefaultHandler):
         res = database.configuration.update_many(filter={'uid': {'$in': uid_list}},
                                                  update={'$set': {'active': False}},
                                                  upsert=False)
-        self.finish(ujson.dumps(res.raw_result))
+        self.finish(ujson.dumps(utils.sanitize_return(res.raw_result)))
 
 
 class SchemaHandler(DefaultHandler):
