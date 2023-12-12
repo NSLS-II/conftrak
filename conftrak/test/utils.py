@@ -6,7 +6,7 @@ from subprocess import Popen, STDOUT
 import os
 from pymongo import MongoClient
 
-testing_config = dict(mongohost='localhost', mongoport=27017,
+testing_config = dict(mongouri='mongodb://localhost'
                       database='conftrak_test'+str(uuid.uuid4()), serviceport=7771,
                       tzone='US/Eastern')
 
@@ -21,9 +21,8 @@ def conftrak_setup():
     env = os.environ.copy()
     f = os.path.dirname(os.path.realpath(__file__))
     proc = Popen([os.path.join(os.path.split(env["_"])[0], "python"),
-                  "../../startup.py", "--mongo-host",
-                  testing_config["mongohost"], "--mongo-port",
-                  str(testing_config['mongoport']), "--database",
+                  "../../startup.py", "--mongo-uri",
+                  testing_config["mongouri"], "--database",
                   testing_config['database'], "--timezone", testing_config['tzone'],
                   "--service-port", str(testing_config['serviceport'])]
                  , cwd=f, env=env, stdout=DEVNULL, stderr=STDOUT)
