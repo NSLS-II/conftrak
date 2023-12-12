@@ -31,8 +31,7 @@ def test_db_connect():
 
     with pytest.raises(ConfTrakException):
         db_connect(TESTING_CONFIG['database'],
-                   'invalid_mongo_uri',
-                   TESTING_CONFIG['mongouri'])
+                   'invalid_mongo_uri')
 
 
 @pytest.mark.gen_test
