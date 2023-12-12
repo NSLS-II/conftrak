@@ -13,7 +13,7 @@ from .utils import testing_config as TESTING_CONFIG
 @pytest.fixture
 def app():
     db = db_connect(TESTING_CONFIG['database'],
-                    TESTING_CONFIG['mongouri']
+                    TESTING_CONFIG['mongouri'])
     return Application(db)
 
 
@@ -27,11 +27,11 @@ def test_parse_configuration():
 
 def test_db_connect():
     db_connect(TESTING_CONFIG['database'],
-               TESTING_CONFIG['mongouri']
+               TESTING_CONFIG['mongouri'])
 
     with pytest.raises(ConfTrakException):
         db_connect(TESTING_CONFIG['database'],
-                   'invalid_mongo_host',
+                   'invalid_mongo_uri',
                    TESTING_CONFIG['mongouri'])
 
 
