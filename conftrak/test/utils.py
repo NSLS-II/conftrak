@@ -6,7 +6,7 @@ from subprocess import Popen, STDOUT
 import os
 from pymongo import MongoClient
 
-testing_config = dict(mongouri='mongodb://localhost'
+testing_config = dict(mongouri='mongodb://localhost',
                       database='conftrak_test'+str(uuid.uuid4()), serviceport=7771,
                       tzone='US/Eastern')
 
@@ -33,8 +33,7 @@ def conftrak_setup():
 def conftrak_teardown():
     proc2 = Popen(['kill', '-9', str(proc.pid)])
     ttime.sleep(5) # make sure the process is killed
-    conn = MongoClient(host=testing_config['mongohost'],
-                       port=testing_config['mongoport'])
+    conn = MongoClient(testing_config['mongouri'])
     conn.drop_database(testing_config['database'])
     conn.close()
     ttime.sleep(2)
