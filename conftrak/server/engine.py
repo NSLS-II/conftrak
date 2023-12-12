@@ -9,7 +9,7 @@ from jsonschema.exceptions import ValidationError, SchemaError
 from ..exceptions import ConfTrakException
 
 
-def db_connect(database, mongo_host, mongo_port):
+def db_connect(database, mongo_uri):
     """Helper function to deal with stateful connections to MongoDB
     Connection established lazily. Connects to the database on request.
     Same connection pool is used for all clients per recommended by
@@ -18,10 +18,8 @@ def db_connect(database, mongo_host, mongo_port):
     ----------
     database: str
         The name of database pymongo creates and/or connects
-    host: str
-        Name/address of the server that mongo daemon lives
-    port: int
-        Port num of the server
+    uri: str
+        URI of the server where mongo daemon lives
     Returns pymongo.database.Database
     -------
         Async server object which comes in handy as server has to juggle
@@ -29,7 +27,7 @@ def db_connect(database, mongo_host, mongo_port):
     to pymongo
     """
     try:
-        client = pymongo.MongoClient(host=mongo_host, port=mongo_port)
+        client = pymongo.MongoClient(mongo_uri)
         client.list_database_names()  # check if the server is really okay.
     except (pymongo.errors.ConnectionFailure,
             pymongo.errors.ServerSelectionTimeoutError):
