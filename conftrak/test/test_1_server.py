@@ -13,14 +13,12 @@ from .utils import testing_config as TESTING_CONFIG
 @pytest.fixture
 def app():
     db = db_connect(TESTING_CONFIG['database'],
-                    TESTING_CONFIG['mongohost'],
-                    TESTING_CONFIG['mongoport'])
+                    TESTING_CONFIG['mongouri']
     return Application(db)
 
 
 def test_parse_configuration():
-    testargs = ["prog", "--database", "conftrak", "--mongo-host", "localhost",
-                "--mongo-port", "27017", #"--service-port", "7771",
+    testargs = ["prog", "--database", "conftrak", "--mongo-uri", "mongodb://localhost",
                 "--timezone", "US/Eastern"]
     with patch.object(sys, 'argv', testargs):
         config = parse_configuration(dict())
@@ -29,13 +27,12 @@ def test_parse_configuration():
 
 def test_db_connect():
     db_connect(TESTING_CONFIG['database'],
-               TESTING_CONFIG['mongohost'],
-               TESTING_CONFIG['mongoport'])
+               TESTING_CONFIG['mongouri']
 
     with pytest.raises(ConfTrakException):
         db_connect(TESTING_CONFIG['database'],
                    'invalid_mongo_host',
-                   TESTING_CONFIG['mongoport'])
+                   TESTING_CONFIG['mongouri'])
 
 
 @pytest.mark.gen_test

@@ -22,7 +22,7 @@ def parse_configuration(config=None):
     if not config:
         config = {k: v for k, v in
                   load_configuration('conftrak', 'CFTRK',
-                                     ['mongo_host', 'mongo_port', 'timezone',
+                                     ['mongo_uri', 'timezone',
                                       'database', 'service_port'],
                                      allow_missing=True).items()
                   if v is not None}
