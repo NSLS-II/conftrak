@@ -6,7 +6,7 @@ from subprocess import Popen, STDOUT
 import os
 from pymongo import MongoClient
 
-testing_config = dict(mongouri='mongodb://localhost',
+testing_config = dict(mongouri='mongodb://localhost', mongohost="localhost",
                       database='conftrak_test'+str(uuid.uuid4()), serviceport=7771,
                       tzone='US/Eastern')
 
