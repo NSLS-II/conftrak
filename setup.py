@@ -53,5 +53,5 @@ setuptools.setup(
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",
     ],
-    entry_points={"console_scripts": ["conftrak_startup = startup:main"]},
+    entry_points={"console_scripts": ["conftrak_startup = conftrak.startup:start_server"]},
 )
