@@ -34,18 +34,6 @@ def db_connect(database, mongo_uri):
         raise ConfTrakException("Unable to connect to MongoDB server...")
 
     database = client[database]
-
-    database.configuration.create_index([('uid', pymongo.DESCENDING)],
-                                        unique=True, background=False)
-    database.configuration.create_index([('time', pymongo.DESCENDING)],
-                                        unique=False, background=True)
-    database.configuration.create_index([('beamline_id', pymongo.DESCENDING)],
-                                        unique=False, background=True,
-                                        sparse=True)
-    database.configuration.create_index([('key', pymongo.DESCENDING)],
-                                        unique=False, background=True,
-                                        sparse=True)
-
     return database
 
 
