@@ -29,9 +29,6 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
 
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.6.0
-
       - name: Set up Python ${{ matrix.python-version }} with conda
         uses: conda-incubator/setup-miniconda@v2
         with:
