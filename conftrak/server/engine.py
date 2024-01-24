@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from tornado import gen
 import tornado.web
 import pymongo
+import mongomock
 import jsonschema
 import ujson
 from . import utils
@@ -9,7 +10,7 @@ from jsonschema.exceptions import ValidationError, SchemaError
 from ..exceptions import ConfTrakException
 
 
-def db_connect(database, mongo_uri):
+def db_connect(database, mongo_uri, testing=False):
     """Helper function to deal with stateful connections to MongoDB
     Connection established lazily. Connects to the database on request.
     Same connection pool is used for all clients per recommended by
@@ -26,12 +27,15 @@ def db_connect(database, mongo_uri):
     multiple clients and makes no difference for a single client compared
     to pymongo
     """
-    try:
-        client = pymongo.MongoClient(mongo_uri)
-        client.list_database_names()  # check if the server is really okay.
-    except (pymongo.errors.ConnectionFailure,
-            pymongo.errors.ServerSelectionTimeoutError):
-        raise ConfTrakException("Unable to connect to MongoDB server...")
+    if testing:
+        client = mongomock.MongoClient(mongo_uri)
+    else:
+        try:
+            client = pymongo.MongoClient(mongo_uri)
+            client.list_database_names()  # check if the server is really okay.
+        except (pymongo.errors.ConnectionFailure,
+                pymongo.errors.ServerSelectionTimeoutError):
+            raise ConfTrakException("Unable to connect to MongoDB server...")
 
     database = client[database]
     return database
