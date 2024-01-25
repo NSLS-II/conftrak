@@ -12,7 +12,7 @@ import contextlib
 from conftrak.client.commands import ConfigurationReference
 from conftrak.client.utils import doc_or_uid_to_uid
 from conftrak.exceptions import ConfTrakNotFoundException
-from conftrak.ignition import parse_configuration
+from conftrak.ignition import parse_configuration, Application
 from conftrak.server.engine import db_connect
 from conftrak.server.utils import ConfTrakException
 from requests.exceptions import RequestException
@@ -50,6 +50,14 @@ def conftrak_server():
     with conftrak() as conftrak_fixture:
         print(conftrak_fixture)
         yield
+
+
+@pytest.fixture
+def app():
+    db = db_connect(
+        testing_config["database"], testing_config["mongo_uri"], testing=True
+    )
+    return Application(db)
 
 
 @pytest.fixture(scope="function")
