@@ -53,7 +53,7 @@ def parse_configuration(config=None):
     return config
 
 
-def start_server(args=None):
+def start_server(args=None, testing=False):
     """
     ConfTrak service startup script.
     Returns tornado event loop provided configuration.
@@ -66,28 +66,12 @@ def start_server(args=None):
         in mind that this server is started in lazy fashion. It does not verify
         the existence of a mongo instance running on the specified location.
     """
-    config = parse_configuration(args)
-    if config['testing']:
-        start_server_real(args)
-    else:
-        start_server_test(args)
-
-
-def start_server_real(args=None):
-    config = parse_configuration(args)
-    db = db_connect(config['database'],
-                    config['mongo_uri'])
-    start_server_start(db, args)
-
-def start_server_test(args=None):
-    config = parse_configuration(args)
-    db = mongomock.MongoClient(config['database'], config['mongo_uri'])
-    start_server_start(db, args)
-
-
-def start_server_start(db, args):
     global server
     config = parse_configuration(args)
+    db = db_connect(config['database'],
+                    config['mongo_uri'],
+                    testing=testing)
+
     tornado.options.parse_command_line({'log_file_prefix':
                                         config['log_file_prefix']})
     app = Application(db)
