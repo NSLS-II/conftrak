@@ -1,6 +1,5 @@
 doct
 jsonschema
-mongomock
 pymongo
 pyyaml
 requests

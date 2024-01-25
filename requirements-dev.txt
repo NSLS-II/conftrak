@@ -1,2 +1,4 @@
 mock
+mongomock
+pytest-tornado
 pytest
