@@ -10,27 +10,26 @@ import time as ttime
 import subprocess
 import contextlib
 from conftrak.client.commands import ConfigurationReference
-from conftrak.client.utils import doc_or_uid_to_uid
 from conftrak.exceptions import ConfTrakNotFoundException
-from conftrak.ignition import parse_configuration, Application
+from conftrak.ignition import Application
 from conftrak.server.engine import db_connect
 from conftrak.server.utils import ConfTrakException
 from requests.exceptions import RequestException
-from tornado.httpclient import AsyncHTTPClient, HTTPResponse
+from tornado.httpclient import HTTPClient
 
 
 testing_config = {
     "mongo_uri": "mongodb://localhost",
     "mongo_host": "localhost",
     "database": "conftrak_test" + str(uuid.uuid4()),
-    "serviceport": 7771,
+    "service_port": 7771,
     "tzone": "US/Eastern",
     "log_file_prefix": "",
 }
 
 
 @contextlib.contextmanager
-def conftrak():
+def conftrak_process():
     try:
         ps = subprocess.Popen(
             [
@@ -47,8 +46,7 @@ def conftrak():
 
 @pytest.fixture(scope="session")
 def conftrak_server():
-    with conftrak() as conftrak_fixture:
-        print(conftrak_fixture)
+    with conftrak_process() as conftrak_fixture:
         yield
 
 
@@ -63,6 +61,11 @@ def app():
 @pytest.fixture(scope="function")
 def conftrak_client():
     c = ConfigurationReference(
-        host=testing_config["mongo_host"], port=testing_config["serviceport"]
+        host=testing_config["mongo_host"], port=testing_config["service_port"]
     )
     return c
+
+
+@pytest.fixture(scope="session")
+def tornado_client():
+    return HTTPClient()
