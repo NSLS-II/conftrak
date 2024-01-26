@@ -1,4 +1,3 @@
 mock
 mongomock
-pytest-tornado==0.8.1
 pytest
