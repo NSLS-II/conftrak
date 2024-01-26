@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from tornado import gen
 import tornado.web
 import pymongo
-import mongomock
 import jsonschema
 import ujson
 from . import utils
@@ -28,6 +27,8 @@ def db_connect(database, mongo_uri, testing=False):
     to pymongo
     """
     if testing:
+        import mongomock
+
         client = mongomock.MongoClient(mongo_uri)
     else:
         try:
