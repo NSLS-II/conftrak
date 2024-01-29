@@ -7,8 +7,6 @@ import time as ttime
 import subprocess
 import contextlib
 from conftrak.client.commands import ConfigurationReference
-from conftrak.ignition import Application
-from conftrak.server.engine import db_connect
 from tornado.httpclient import HTTPClient
 
 
@@ -42,14 +40,6 @@ def conftrak_process():
 def conftrak_server():
     with conftrak_process() as conftrak_fixture:
         yield
-
-
-@pytest.fixture
-def app():
-    db = db_connect(
-        testing_config["database"], testing_config["mongo_uri"], testing=True
-    )
-    return Application(db)
 
 
 @pytest.fixture(scope="function")
