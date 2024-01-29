@@ -9,4 +9,3 @@ def test_docuid_uid():
     doc = dict(uid=uid)
     assert uid == doc_or_uid_to_uid(uid)
     assert uid == doc_or_uid_to_uid(doc)
-

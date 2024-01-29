@@ -7,8 +7,8 @@ from .utils import _get, _post, _put, _delete
 
 class ConfigurationReference(object):
     """Reference implementation of generic configuration manager"""
-    def __init__(self, host=conf.conn_config['host'],
-                 port=conf.conn_config['port']):
+
+    def __init__(self, host=conf.conn_config["host"], port=conf.conn_config["port"]):
         """Constructor
 
         Parameters
@@ -25,17 +25,17 @@ class ConfigurationReference(object):
     @property
     def _server_path(self):
         """URL to the ConfTrak server"""
-        return 'http://{}:{}/'.format(self.host, self.port)
+        return "http://{}:{}/".format(self.host, self.port)
 
     @property
     def _conf_url(self):
         """URL to the configuration reference handler in the server side"""
-        return self._server_path + 'configuration'
+        return self._server_path + "configuration"
 
     @property
     def _schema_url(self):
         """URL to the schema reference handler in the server side"""
-        return self._server_path + 'schema'
+        return self._server_path + "schema"
 
     def create(self, beamline_id, time=None, uid=None, **kwargs):
         """Insert a configuration to the database
@@ -55,10 +55,7 @@ class ConfigurationReference(object):
             The inserted document
 
         """
-        doc = dict(uid=uid,
-                   beamline_id=beamline_id,
-                   time=time,
-                   **kwargs)
+        doc = dict(uid=uid, beamline_id=beamline_id, time=time, **kwargs)
         ins_doc = _post(self._conf_url, doc)
         return ins_doc[0]
 
@@ -98,11 +95,11 @@ class ConfigurationReference(object):
             Documents which have all keys with the given values
 
         """
-        kwargs['active_only'] = active_only
+        kwargs["active_only"] = active_only
         content = _get(self._conf_url, params=kwargs)
         if as_document:
             for c in content:
-                yield Document('Configuration', c)
+                yield Document("Configuration", c)
         else:
             for c in content:
                 yield c
@@ -116,7 +113,7 @@ class ConfigurationReference(object):
             List of unique identifiers to be marked as inactive.
 
         """
-        _delete(self._conf_url, params={'uid_list':uid_list})
+        _delete(self._conf_url, params={"uid_list": uid_list})
         return True
 
     def get_schema(self):
@@ -128,8 +125,6 @@ class ConfigurationReference(object):
             Returns the json schema dict used for validation
 
         """
-        r = requests.get(self._schema_url,
-                         params=ujson.dumps('configuration'))
+        r = requests.get(self._schema_url, params=ujson.dumps("configuration"))
         r.raise_for_status()
         return ujson.loads(r.text)
-
