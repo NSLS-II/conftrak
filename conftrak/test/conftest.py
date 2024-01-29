@@ -1,20 +1,14 @@
 import pytest
 from conftrak.ignition import start_server
-from doct import Document
 from mock import patch
-import ujson
-import jsonschema
 import uuid
 import sys
 import time as ttime
 import subprocess
 import contextlib
 from conftrak.client.commands import ConfigurationReference
-from conftrak.exceptions import ConfTrakNotFoundException
 from conftrak.ignition import Application
 from conftrak.server.engine import db_connect
-from conftrak.server.utils import ConfTrakException
-from requests.exceptions import RequestException
 from tornado.httpclient import HTTPClient
 
 
