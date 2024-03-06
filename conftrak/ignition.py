@@ -36,11 +36,11 @@ def parse_configuration(config=None):
         "--database", dest="database", type=str, help="name of database to use"
     )
     parser.add_argument(
-        "--mongo-uri", dest="mongo_uri", type=str, help="URI to use to connect to Mongo"
+        "--mongo_uri", dest="mongo_uri", type=str, help="URI to use to connect to Mongo"
     )
     parser.add_argument("--timezone", dest="timezone", type=str, help="Local timezone")
     parser.add_argument(
-        "--service-port",
+        "--service_port",
         dest="service_port",
         type=int,
         help="port listen to for clients",
