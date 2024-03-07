@@ -13,7 +13,7 @@ def test_parse_configuration():
         "prog",
         "--database",
         "conftrak",
-        "--mongo-uri",
+        "--mongo_uri",
         "mongodb://localhost",
         "--timezone",
         "US/Eastern",
