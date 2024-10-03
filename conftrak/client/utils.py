@@ -42,7 +42,7 @@ def _get(url, params):
         Results of the query
 
     """
-    r = session.get(url, ujson.dumps(params))
+    r = session.get(url, params=ujson.dumps(params))
     if r.status_code == 500 and "found" in r.reason:
         raise ConfTrakNotFoundException(r.reason)
     r.raise_for_status()
