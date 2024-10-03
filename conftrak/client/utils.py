@@ -2,6 +2,10 @@ import requests
 import ujson
 from ..exceptions import ConfTrakNotFoundException
 
+
+session = requests.Session()
+
+
 def doc_or_uid_to_uid(doc_or_uid):
     """Given Document or uid return the uid
 
@@ -38,7 +42,7 @@ def _get(url, params):
         Results of the query
 
     """
-    r = requests.get(url, ujson.dumps(params))
+    r = session.get(url, params=ujson.dumps(params))
     if r.status_code == 500 and "found" in r.reason:
         raise ConfTrakNotFoundException(r.reason)
     r.raise_for_status()
@@ -56,7 +60,7 @@ def _post(url, data):
         Entries to be inserted to database
 
     """
-    r = requests.post(url,
+    r = session.post(url,
                       data=ujson.dumps(data))
     r.raise_for_status()
     return r.json()
@@ -86,7 +90,7 @@ def _put(url, query, update):
 
     """
     update_cont = {'query': query, 'update': update}
-    r = requests.put(url,
+    r = session.put(url,
                      data=ujson.dumps(update_cont))
     r.raise_for_status()
 
@@ -113,7 +117,7 @@ def _delete(url, params):
 
     """
     url_with_params = "{}?{}".format(url, ujson.dumps(params)) 
-    r = requests.delete(url_with_params)
+    r = session.delete(url_with_params)
     r.raise_for_status()
 
 
